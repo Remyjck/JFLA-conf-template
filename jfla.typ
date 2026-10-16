@@ -1,3 +1,4 @@
+
 #import "@preview/bullseye:0.1.0" as bullseye
 
 #import "@preview/theorion:0.6.0": (
@@ -43,6 +44,9 @@
     JFLA #(1989 + jfla-numbering) – #jfla-numbering#super[th] Journées
     Francophones des Langages Applicatifs
   ]
+  #let heading-supplement = if lang == "fr" { "section" } else if lang == "en" {
+    "Section"
+  }
 
   #if running-title == none {
     running-title = title
@@ -52,11 +56,20 @@
   #show: cosmos.simple.show-theorion
   #show link: underline
   #set figure(kind: image)
-  #show figure.where(kind: image): set figure(supplement: [Figure])
+  #show figure.where(kind: image): set figure(supplement: "Figure")
   #show figure.where(kind: image): set block(spacing: 5mm)
   #show figure.where(kind: image): set place(clearance: 5mm)
 
-  #show figure: set par.line(numbering: none)
+  #show: it => {
+    if lang == "fr" {
+      show ref: lower
+      it
+    } else if lang == "en" {
+      it
+    }
+  }
+
+  #show figure.where(kind: image): set par.line(numbering: none)
   #show figure.caption: it => [
     *#it.supplement #context { it.counter.display(it.numbering) }.*
     #it.body
@@ -172,7 +185,7 @@
   )
 
   #set heading(numbering: "1.1.1 ")
-  #show heading.where(level: 1): set heading(supplement: "Section")
+  #show heading.where(level: 1): set heading(supplement: heading-supplement)
 
   #let block-heading(above: none, below: none, it) = {
     if above.weak != none { v(weak: true, above.weak) }
